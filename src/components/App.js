@@ -1,53 +1,55 @@
 import React, { useState } from 'react';
+import { usePreciseTimer } from './usePresiceTime';
+import Timer from './Timer';
 
-const App = () => {
-  const [startTime, setStartTime] = useState(0);
-  const [timeToShow, setTimeToShow] = useState(0);
+export default function App() {
+  const [timer, setTimer] = useState([]);
+  const [isActive, setIsActive] = useState(false);
 
-  /*
-   ** object with :
-   ** 1.name;
-   ** 2.id
-   ** 3:time start
-   ** 4.isActive
-   ** 5.pauseTime
-   **
-   */
-
-  const startTimer = (aaa) => {
-    setStartTime(Date.now());
-
-    setInterval(() => countTime(aaa), 1000);
+  const updateTimer = time => {
+    setTimer(updatedTimerlist =>
+      updatedTimerlist.map(el =>
+        el.isActive ? { ...el, timeAll: el.timeAll + time } : el
+      )
+    );
   };
 
-  const countTime = aa => {
-    const currentTime = Date.now();
-    console.log(aa);
-    console.log(startTime);
-    // setTimeToShow(currentTime - startTime);
+  usePreciseTimer(updateTimer, 1000, isActive);
+
+  const toggle = name => {
+    const newTimerList = timer.map(el =>
+      el.name === name ? { ...el, isActive: !el.isActive } : el
+    );
+    setTimer(newTimerList);
+
+    isTimeCount(newTimerList);
   };
 
-  const adjustTime = time => {
-    let min = Math.floor((time / 1000 / 60) % 60);
-    let sec = Math.floor((time / 1000) % 60);
-    let msc = Math.floor((time / 100) % 10);
-    let minT = min < 10 ? `0${min}` : min;
-    let secT = sec < 10 ? `0${sec}` : sec;
-    let mscT = msc < 10 ? `0${msc}` : msc;
+  const isTimeCount = list => {
+    const isAnyActive = list.some(el => el.isActive);
+    setIsActive(isAnyActive);
+  };
 
-    return `${minT}:${secT}.${mscT}`;
+  const addTimer = () => {
+    const newTimer = {
+      name: Date.now(),
+      isActive: false,
+      timeAll: 0
+    };
+
+    setTimer(prev => [newTimer, ...prev]);
   };
 
   return (
     <>
-      <p>{timeToShow} </p>
-
-      <button onClick={() => startTimer(startTime)}>start</button>
-      <br />
-      <button>stop</button>
-      <br />
+      <button onClick={addTimer}>ADD TIMER</button>
+      <ul>
+        {timer.map(el => (
+          <li key={el.name}>
+            <Timer timer={el} toggle={toggle} />
+          </li>
+        ))}
+      </ul>
     </>
   );
-};
-
-export default App;
+}
