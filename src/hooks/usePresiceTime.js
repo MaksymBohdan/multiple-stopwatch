@@ -19,9 +19,7 @@ export const usePreciseTimer = (
         handler(delay / 1000);
       }, periodInMilliseconds);
 
-      return () => {
-        clearInterval(id);
-      };
+      return () => clearInterval(id);
     }
-  }, [periodInMilliseconds, activityFlag]);
+  }, [activityFlag]);
 };
