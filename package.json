@@ -3,12 +3,6 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "babel": {
-    "presets": [
-      "@babel/preset-env",
-      "@babel/preset-react"
-    ]
-  },
   "scripts": {
     "start": "webpack-dev-server --open --hot",
     "build": "webpack"
@@ -17,9 +11,13 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "add": "^2.0.6",
+    "antd": "^4.0.0",
+    "babel-plugin-import": "^1.13.0",
     "normalize.css": "^8.0.1",
     "react": "^16.8.6",
-    "react-dom": "^16.8.6"
+    "react-dom": "^16.8.6",
+    "styled-components": "^5.0.1"
   },
   "devDependencies": {
     "@babel/core": "^7.4.3",
