@@ -1,18 +1,23 @@
 import React, { useState } from 'react';
+import styled from 'styled-components';
+import { Layout } from 'antd';
+
 import TimerView from './TimerView';
 
 const TimerContainer = () => {
   const [timerList, setTimerList] = useState({});
+  const [inputValue, setInputValue] = useState('');
 
   const addTimer = () => {
     const newTimer = {
       id: Date.now(),
-      name: Date.now(),
+      name: inputValue || Date.now(),
       isActive: false,
       time: 0
     };
 
     setTimerList(prevList => ({ ...prevList, [newTimer.id]: newTimer }));
+    setInputValue('');
   };
 
   const updateTimer = id => time => {
@@ -46,20 +51,27 @@ const TimerContainer = () => {
     });
   };
 
+  const onInputChange = e => {
+    setInputValue(e.target.value);
+  };
+
   return (
-    <div>
-      <button onClick={addTimer}>ADD TIMER</button>
-      {Object.values(timerList).map(timer => (
-        <TimerView
-          key={timer.id}
-          toggleStart={toggleStart}
-          updateTimer={updateTimer}
-          reset={reset}
-          {...timer}
-        />
-      ))}
-    </div>
+    <StyledContent>
+      <TimerView
+        timerList={timerList}
+        addTimer={addTimer}
+        updateTimer={updateTimer}
+        toggleStart={toggleStart}
+        reset={reset}
+        onInputChange={onInputChange}
+        inputValue={inputValue}
+      />
+    </StyledContent>
   );
 };
+
+const StyledContent = styled(Layout.Content)`
+  padding: 10px;
+`;
 
 export default TimerContainer;
